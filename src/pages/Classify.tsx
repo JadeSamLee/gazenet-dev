@@ -12,7 +12,6 @@ interface ClassificationResult {
 const Classify = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [result, setResult] = useState<ClassificationResult | null>(null);
@@ -74,19 +73,11 @@ const Classify = () => {
       return;
     }
     
-    // Create URL for the video file but we won't display it
-    const url = URL.createObjectURL(file);
     setVideoFile(file);
-    setVideoUrl(url);
   };
 
   const handleResetVideo = () => {
-    if (videoUrl) {
-      URL.revokeObjectURL(videoUrl);
-    }
-    
     setVideoFile(null);
-    setVideoUrl(null);
     setResult(null);
     setError(null);
     
@@ -102,10 +93,23 @@ const Classify = () => {
     setLoadingMessage("Preprocessing video frames...");
     
     try {
-      // Simulate different stages of processing
-      setTimeout(() => setLoadingMessage("Applying TimeSformer vision transformer..."), 1000);
-      setTimeout(() => setLoadingMessage("Running LSTM sequence analysis..."), 2000);
-      setTimeout(() => setLoadingMessage("Applying dynamic attention modulation..."), 3000);
+      // Simulate different stages of processing over the 30 second period
+      const stages = [
+        { time: 3000, message: "Extracting key frames..." },
+        { time: 7000, message: "Applying TimeSformer vision transformer..." },
+        { time: 12000, message: "Analyzing gaze patterns..." },
+        { time: 18000, message: "Running LSTM sequence analysis..." },
+        { time: 23000, message: "Applying dynamic attention modulation..." },
+        { time: 27000, message: "Finalizing classification results..." }
+      ];
+      
+      stages.forEach(stage => {
+        setTimeout(() => {
+          if (isProcessing) {
+            setLoadingMessage(stage.message);
+          }
+        }, stage.time);
+      });
       
       const classificationResult = await classifyVideo(videoFile);
       setResult(classificationResult);
@@ -151,8 +155,8 @@ const Classify = () => {
                 <div
                   className={`border-2 border-dashed rounded-lg p-8 w-full transition-all duration-300 ${
                     isDragging 
-                      ? 'border-teal-700 bg-teal-50' 
-                      : 'border-gray-300 hover:border-teal-600 hover:bg-gray-50'
+                      ? 'border-teal-800 bg-teal-50' 
+                      : 'border-gray-300 hover:border-teal-700 hover:bg-gray-50'
                   }`}
                   onDragEnter={handleDragEnter}
                   onDragLeave={handleDragLeave}
@@ -160,12 +164,12 @@ const Classify = () => {
                   onDrop={handleDrop}
                 >
                   <div className="flex flex-col items-center">
-                    <Upload className="h-12 w-12 text-teal-700 mb-4" />
+                    <Upload className="h-12 w-12 text-teal-800 mb-4" />
                     <p className="text-lg mb-2">Drag and drop your video here</p>
                     <p className="text-sm text-gray-500 mb-4">or</p>
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-4 py-2 bg-teal-700 text-white rounded-md hover:bg-teal-800 transition-colors"
+                      className="px-4 py-2 bg-teal-800 text-white rounded-md hover:bg-teal-900 transition-colors"
                     >
                       Browse Files
                     </button>
@@ -212,7 +216,7 @@ const Classify = () => {
                 
                 <div className="flex-1 p-6 flex flex-col justify-center items-center">
                   <div className="mb-4 bg-teal-50 p-4 rounded-full">
-                    <Upload className="h-8 w-8 text-teal-700" />
+                    <Upload className="h-8 w-8 text-teal-800" />
                   </div>
                   <p className="text-lg font-medium mb-1">{videoFile.name}</p>
                   <p className="text-sm text-gray-500">
@@ -231,7 +235,7 @@ const Classify = () => {
                       className={`px-4 py-2 rounded-md flex items-center ${
                         isProcessing || !isModelLoaded
                           ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                          : 'bg-teal-700 text-white hover:bg-teal-800'
+                          : 'bg-teal-800 text-white hover:bg-teal-900'
                       }`}
                     >
                       {isProcessing ? (
@@ -249,7 +253,7 @@ const Classify = () => {
                   </div>
                   
                   {!isModelLoaded && (
-                    <div className="mt-2 text-sm text-teal-700">
+                    <div className="mt-2 text-sm text-teal-800">
                       <div className="flex items-center">
                         <Loader2 className="h-3 w-3 mr-1 animate-spin" />
                         Loading model...
@@ -258,7 +262,7 @@ const Classify = () => {
                   )}
                   
                   {isProcessing && loadingMessage && (
-                    <div className="mt-2 text-xs text-teal-700">
+                    <div className="mt-2 text-xs text-teal-800">
                       {loadingMessage}
                     </div>
                   )}
@@ -306,13 +310,13 @@ const Classify = () => {
                     className="h-full flex flex-col items-center justify-center text-center p-8"
                   >
                     <div className="bg-teal-50 rounded-full p-6 mb-6">
-                      <Loader2 className="h-12 w-12 text-teal-700 animate-spin" />
+                      <Loader2 className="h-12 w-12 text-teal-800 animate-spin" />
                     </div>
                     <h3 className="text-xl font-medium mb-3">Processing Video</h3>
                     <p className="text-gray-600 mb-2">
                       Our TimeSformer model is analyzing your video...
                     </p>
-                    <p className="text-sm text-teal-700 font-medium">
+                    <p className="text-sm text-teal-800 font-medium">
                       {loadingMessage}
                     </p>
                   </motion.div>
@@ -326,7 +330,7 @@ const Classify = () => {
                   >
                     <div className="flex justify-center mb-6">
                       <div className="bg-teal-50 rounded-full p-4">
-                        <CheckCircle className="h-10 w-10 text-teal-700" />
+                        <CheckCircle className="h-10 w-10 text-teal-800" />
                       </div>
                     </div>
                     
@@ -336,7 +340,7 @@ const Classify = () => {
                     
                     <div className="grid grid-cols-1 gap-6">
                       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                        <div className="bg-teal-700 text-white px-4 py-2 font-medium">
+                        <div className="bg-teal-800 text-white px-4 py-2 font-medium">
                           Task Classification
                         </div>
                         <div className="p-4">
@@ -349,7 +353,7 @@ const Classify = () => {
                       </div>
                       
                       <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                        <div className="bg-teal-700 text-white px-4 py-2 font-medium">
+                        <div className="bg-teal-800 text-white px-4 py-2 font-medium">
                           Attention Classification
                         </div>
                         <div className="p-4">

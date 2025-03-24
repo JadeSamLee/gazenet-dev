@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Home, Info, BarChart2, Menu, X, Eye } from 'lucide-react';
+import { Home, Info, BarChart2, Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,7 +41,7 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Site name without logo */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -49,11 +49,7 @@ const Header = () => {
             className="flex items-center"
           >
             <NavLink to="/" className="flex items-center">
-              <div className="relative h-10 w-10 bg-gradient-to-br from-teal-700 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
-                <span className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-sm"></span>
-                <Eye className="h-5 w-5 text-white" />
-              </div>
-              <span className="ml-2 text-xl font-bold gradient-text">GazeNet</span>
+              <span className="text-xl font-bold gradient-text">GazeNet</span>
             </NavLink>
           </motion.div>
 
@@ -71,7 +67,7 @@ const Header = () => {
                 className={({ isActive }) =>
                   `flex items-center px-4 py-2 rounded-md transition-all duration-300 ${
                     isActive
-                      ? 'bg-teal-700 text-white shadow-md'
+                      ? 'bg-teal-800 text-white shadow-md'
                       : 'hover:bg-teal-100 text-gray-700'
                   }`
                 }
@@ -96,9 +92,9 @@ const Header = () => {
               className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
             >
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-teal-700" />
+                <X className="h-6 w-6 text-teal-800" />
               ) : (
-                <Menu className="h-6 w-6 text-teal-700" />
+                <Menu className="h-6 w-6 text-teal-800" />
               )}
             </button>
           </div>
@@ -123,7 +119,7 @@ const Header = () => {
               className={({ isActive }) =>
                 `flex items-center px-4 py-3 rounded-md ${
                   isActive
-                    ? 'bg-teal-700 text-white'
+                    ? 'bg-teal-800 text-white'
                     : 'hover:bg-teal-100 text-gray-700'
                 }`
               }

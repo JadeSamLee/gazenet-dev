@@ -1,4 +1,3 @@
-
 interface ClassificationResult {
   task: string;
   attention: string;
@@ -10,7 +9,7 @@ export const classifyVideo = (file: File): Promise<ClassificationResult> => {
   return new Promise((resolve) => {
     console.log("Processing video:", file.name);
     
-    // Simulate processing delay
+    // Simulate processing delay of 30 seconds
     setTimeout(() => {
       const fileName = file.name.toLowerCase();
       
@@ -45,7 +44,7 @@ export const classifyVideo = (file: File): Promise<ClassificationResult> => {
           attention: attentions[Math.floor(Math.random() * attentions.length)]
         });
       }
-    }, 2500); // Simulate processing time
+    }, 30000); // 30 second delay
   });
 };
 
