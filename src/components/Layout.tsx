@@ -2,15 +2,24 @@
 import { ReactNode } from 'react';
 import Header from './Header';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  // This is a safe check to ensure we only render the Header when inside a Router context
+  let isRouterAvailable = true;
+  try {
+    useLocation();
+  } catch (e) {
+    isRouterAvailable = false;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
+      {isRouterAvailable && <Header />}
       <motion.main 
         className="flex-1 container mx-auto px-4 py-8 sm:px-6 lg:px-8 relative z-10"
         initial={{ opacity: 0, y: 20 }}
